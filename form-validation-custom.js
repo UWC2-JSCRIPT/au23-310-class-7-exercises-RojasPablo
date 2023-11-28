@@ -11,24 +11,29 @@ const employees = document.getElementById("num-of-employees");
 // check if an input meets a length requirement 
 let valid = false;
 
-const validLength = (input, min) => {
+const validLength = (input, min, errorMessage) => {
+    const errorElement = input.parentElement.querySelector(".error");
     if (input.value.trim().length >= min) {
         input.parentElement.classList.remove("invalid");
+        errorElement.textContent = "";
         return true;
-        alert("Length of given name does not meet the required")
     } else {
         input.parentElement.classList.add("invalid");
+        errorElement.textContent = errorMessage;
         return false;
     }
 };
 
-const validateEmail = (emailField) => {
+const validateEmail = (emailField, errorMessage) => {
+    const errorElement = emailField.parentElement.querySelector(".error");
     const re = /\w+@\w+\.\w+/;
     if (re.test(emailField.value.trim())) {
         emailField.parentElement.classList.remove("invalid");
+        errorElement.textContent = "";
         return true;
     } else {
         emailField.parentElement.classList.add("invalid");
+        errorElement.textContent = errorMessage;
         return false;
     }
 };
@@ -51,10 +56,14 @@ select.addEventListener("change", () => handleSelect(select));
 
 form.addEventListener("submit", (e) => {
     handleSelect(select);
-    if (validLength(firstName, 3) && validLength(lastName, 3) && validateEmail(email)) {
+    if (
+        validLength(firstName, 3, "First Name is required and must be at least 3 characters") && 
+        validLength(lastName, 3, "Last Name is required and must be at least 3 characters") && 
+        validateEmail(email, "Email is required")) {
         valid = true;
     } else {
         valid = false;
         e.preventDefault();
+        console.log("Bad Input")
     }
 });
